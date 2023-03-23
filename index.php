@@ -37,35 +37,49 @@ if (isset($_GET['u'])) {
         $sql2 = mysqli_query($connex, "SELECT * FROM url ORDER BY id DESC");
         if (mysqli_num_rows($sql2) > 0) {
         ?>
-        <div class="count">
-            <span>Total Links: <span>10</span> & Total Clicks: <span>140</span></span>
-            <a href="#">Clear All</a>
-        </div>
-        <div class="urls-area">
+            <div class="count">
+                <span>Total Links: <span>10</span> & Total Clicks: <span>140</span></span>
+                <a href="#">Clear All</a>
+            </div>
+            <div class="urls-area">
 
-            <div class="title">
-                <li>Shorten URL</li>
-                <li>Original URL</li>
-                <li>Clicks</li>
-                <li>Action</li>
-            </div>
+                <div class="title">
+                    <li>Shorten URL</li>
+                    <li>Original URL</li>
+                    <li>Clicks</li>
+                    <li>Action</li>
+                </div>
+                <?php
+                while ($row = mysqli_fetch_assoc($sql2)) {
+                ?>
+                    <div class="data">
+                        <li><a href="#">
+                                <?php
+                                if ('localhost/url?u=' . strlen($row['shorten_url']) > 50) {
+                                    echo 'localhost/url?u=' . substr($row['shorten_url'], 0, 50) . '....';
+                                } else {
+                                    echo 'localhost/url?u=' . $row['shorten_url'];
+                                }
+                                ?>
+                            </a>
+                        </li>
+                        <li>
+                            <?php
+                            if (strlen($row['full_url']) > 65) {
+                                echo substr($row['full_url'], 0, 65) . '.....';
+                            } else {
+                                echo $row['full_url'];
+                            }
+                            ?>
+                        </li>
+                        <li><?php echo $row['clicks'] ?></li>
+                        <li><a href="#">Delete</a></li>
+                    </div>
             <?php
-            while ($row = mysqli_fetch_assoc($sql2)) {
-            ?>
-            <div class="data">
-                <li><a href="#"><?php echo $row['shorten_url'] ?></a></li>
-                <li><?php echo $row['full_url'] ?></li>
-                <li><?php echo $row['clicks'] ?></li>
-                <li><a href="#">Delete</a></li>
-            </div>
-            <?php
+                }
             }
-        }
-        ?>
-        </div>
-
-
-
+            ?>
+            </div>
     </div>
 
 
