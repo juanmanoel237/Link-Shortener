@@ -1,3 +1,19 @@
+<!-- Redirigeons l'utilisateur vers le lien original en utilisant le lien raccourci -->
+<?php
+include "php/config.php";
+if (isset($_GET['u'])) {
+    $u = mysqli_real_escape_string($connex, $_GET['u']);
+
+    //Récupérer l'URL complete de l'URL courte que nous obtenons de l'URL
+    $sql = mysqli_query($connex, "SELECT full_url FROM url WHERE shorten_url = '{$u}'");
+    if (mysqli_num_rows($sql) > 0) {
+        //Redirigeons l'utilisateur
+        $full_url = mysqli_fetch_assoc($sql);
+        header("Location:" . $full_url['full_url']);
+    }
+}
+?>
+
 <!DOCTYPE html>
 <html lang="en">
 
@@ -17,25 +33,41 @@
             <input type="text" name="full-url" placeholder="Enter or paste a long URL" required />
             <button>Shorten</button>
         </form>
+        <?php
+        $sql2 = mysqli_query($connex, "SELECT * FROM url ORDER BY id DESC");
+        if (mysqli_num_rows($sql2) > 0) {
+        ?>
         <div class="count">
             <span>Total Links: <span>10</span> & Total Clicks: <span>140</span></span>
             <a href="#">Clear All</a>
         </div>
         <div class="urls-area">
+
             <div class="title">
                 <li>Shorten URL</li>
                 <li>Original URL</li>
                 <li>Clicks</li>
                 <li>Action</li>
             </div>
+            <?php
+            while ($row = mysqli_fetch_assoc($sql2)) {
+            ?>
             <div class="data">
-                <li><a href="#">example.com/xyz123</a></li>
-                <li>www.google.com</li>
-                <li>15</li>
+                <li><a href="#"><?php echo $row['shorten_url'] ?></a></li>
+                <li><?php echo $row['full_url'] ?></li>
+                <li><?php echo $row['clicks'] ?></li>
                 <li><a href="#">Delete</a></li>
             </div>
+            <?php
+            }
+        }
+        ?>
         </div>
+
+
+
     </div>
+
 
     <div class="blur-effect"></div>
     <div class="popup-box">

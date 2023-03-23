@@ -9,7 +9,7 @@ if (!empty($full_url) && filter_var($full_url, FILTER_VALIDATE_URL)) {
     $ran_url = substr(md5(microtime()), rand(0, 26), 5); //génère un URL au hasard avec 5 caratères
 
     //Vérifier si un random url existe déja dans la base de données
-    $sql = mysqli_query($connex, "SELECT shorten_url FROM url WHERE shorten_url = {$ran_url}");
+    $sql = mysqli_query($connex, "SELECT shorten_url FROM url WHERE shorten_url = '{$ran_url}'");
     if (mysqli_num_rows($sql) > 0) {
         echo "Something went wrong. Please regenerate url again!";
     } else {
@@ -20,7 +20,7 @@ if (!empty($full_url) && filter_var($full_url, FILTER_VALIDATE_URL)) {
         if ($sql2) {
 
             //On selectionne le lien court recemment inséré
-            $sql3 = mysqli_query($connex, "SELECT shorten_url FROM url WHERE shorten_url = {$ran_url}");
+            $sql3 = mysqli_query($connex, "SELECT shorten_url FROM url WHERE shorten_url = '{$ran_url}'");
             if (mysqli_num_rows($sql) > 0) {
                 $shorten_url = mysqli_fetch_assoc($sql3);
                 echo $shorten_url['shorten_url'];
